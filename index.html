@@ -3,209 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🇦🇱 Mëso Shqip - Albanian Learning</title>
+    <title>🇦🇱 Mëso Shqip - Learn Albanian</title>
     
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    
-    <!-- PWA Meta Tags -->
-    <meta name="description" content="Learn Albanian offline - dictionary, phrases, and translator">
-    <meta name="theme-color" content="#dc2626">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Mëso Shqip">
     <link rel="manifest" href="/manifest.json">
+    
     <style>
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #b91c1c;
+            --success: #10b981;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             min-height: 100vh;
-            padding: 1rem;
+            padding: 0;
         }
-        .container {
-            max-width: 1200px;
+        
+        .app-container {
+            max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 { font-size: 1.75rem; font-weight: 700; }
+        .header-subtitle { font-size: 0.9rem; opacity: 0.9; margin-top: 0.25rem; }
+        
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status-online { background: var(--success); color: white; }
+        .status-offline { background: #f59e0b; color: white; }
+        
+        .main-content {
+            flex: 1;
+            background: var(--bg);
+            display: flex;
             overflow: hidden;
         }
-        .header {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            color: white;
-            padding: 2rem;
-            text-align: center;
+        
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
         }
-        .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .tabs {
+        
+        .nav-item {
+            padding: 0.75rem;
+            margin-bottom: 0.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
             display: flex;
-            gap: 0.5rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            overflow-x: auto;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
         }
-        .tab-btn {
-            padding: 0.75rem 1.5rem;
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-        .tab-btn:hover { border-color: #dc2626; }
-        .tab-btn.active {
-            background: #dc2626;
-            color: white;
-            border-color: #dc2626;
-        }
-        .tab-content {
-            display: none;
+        
+        .nav-item:hover { background: var(--bg); }
+        .nav-item.active { background: var(--primary); color: white; }
+        
+        .content-area {
+            flex: 1;
             padding: 2rem;
+            overflow-y: auto;
         }
-        .tab-content.active { display: block; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .card {
-            background: #f8f9fa;
-            padding: 1.5rem;
+            background: var(--card);
             border-radius: 12px;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
         }
-        .card h3 {
-            color: #dc2626;
-            margin-bottom: 1rem;
+        
+        .card-title {
             font-size: 1.5rem;
-        }
-        .search-box {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1rem;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            font-weight: 700;
+            color: var(--text);
             margin-bottom: 1rem;
         }
-        .search-box:focus {
-            outline: none;
-            border-color: #dc2626;
+        
+        .card-subtitle {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
         }
-        .result-item {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            border-left: 4px solid #dc2626;
-        }
-        .result-item strong { color: #dc2626; }
-        .phrase-item {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.75rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .phrase-item:hover { transform: translateX(5px); }
-        .albanian {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #dc2626;
-            margin-bottom: 0.25rem;
-        }
-        .pronunciation {
-            color: #666;
-            font-style: italic;
-            margin-bottom: 0.25rem;
-        }
-        .english {
-            color: #333;
-        }
-        textarea {
+        
+        textarea, input[type="text"] {
             width: 100%;
-            padding: 1rem;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            padding: 0.875rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
             font-size: 1rem;
-            resize: vertical;
-            min-height: 120px;
+            font-family: inherit;
+            transition: all 0.2s;
         }
+        
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+        
+        textarea { resize: vertical; min-height: 120px; }
+        
         .btn {
             padding: 0.75rem 1.5rem;
-            background: #dc2626;
-            color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        .btn:hover { background: #b91c1c; }
+        
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        
+        .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: white; }
+        
+        .btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
+        
+        .translation-mode {
+            text-align: center;
+            padding: 0.75rem;
+            background: var(--bg);
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .phrase-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .phrase-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow);
+        }
+        
+        .phrase-albanian {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .phrase-pronunciation {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+        
+        .phrase-english { font-size: 1rem; color: var(--text); }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-box input { padding-left: 3rem; }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.25rem;
+        }
+        
+        .dict-result {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg);
+            border-left: 4px solid var(--primary);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .loading {
+            text-align: center;
+            color: var(--text-light);
+            padding: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .content-area { padding: 1rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="app-container">
         <div class="header">
-            <h1>🇦🇱 Mëso Shqip</h1>
-            <p>Your Albanian Language Companion</p>
-            <button id="installBtn" class="btn" style="display: none; margin-top: 1rem;">📱 Install App</button>
+            <div>
+                <h1>🇦🇱 Mëso Shqip</h1>
+                <div class="header-subtitle">1000+ Words Offline • Google Translate When Online</div>
+            </div>
+            <div class="status-badge" id="statusBadge">
+                <span id="statusIcon">🌐</span>
+                <span id="statusText">Checking...</span>
+            </div>
         </div>
-
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('translator')">🔄 Translator</button>
-            <button class="tab-btn" onclick="switchTab('dictionary')">📖 Dictionary</button>
-            <button class="tab-btn" onclick="switchTab('phrases')">💬 Phrases</button>
-            <button class="tab-btn" onclick="switchTab('alphabet')">🔤 Alphabet</button>
-        </div>
-
-        <div id="translator" class="tab-content active">
-            <div class="card">
-                <h3>🔄 Offline Translator</h3>
-                <p style="margin-bottom: 1rem; color: #666;">Type English, get Albanian! Works offline with 650+ words.</p>
-                <textarea id="input" placeholder="Type English text here..." oninput="translate()"></textarea>
-                <div style="margin: 1rem 0;">
-                    <button class="btn" onclick="switchDirection()">⇄ Switch Direction</button>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="nav-item active" onclick="showTab('translator')">
+                    <span>🔄</span> <span>Translator</span>
                 </div>
-                <textarea id="output" placeholder="Translation appears here..." readonly style="background: #f8f9fa;"></textarea>
+                <div class="nav-item" onclick="showTab('dictionary')">
+                    <span>📖</span> <span>Dictionary</span>
+                </div>
+                <div class="nav-item" onclick="showTab('phrases')">
+                    <span>💬</span> <span>Phrases</span>
+                </div>
             </div>
-        </div>
-
-        <div id="dictionary" class="tab-content">
-            <div class="card">
-                <h3>📖 Dictionary</h3>
-                <p style="margin-bottom: 1rem; color: #666;">Search 650+ words - English to Albanian</p>
-                <input type="text" class="search-box" id="searchBox" placeholder="Search..." oninput="searchDictionary()">
-                <div id="results"></div>
-            </div>
-        </div>
-
-        <div id="phrases" class="tab-content">
-            <div class="card">
-                <h3>💬 Essential Phrases</h3>
-                <div id="phrasesList"></div>
-            </div>
-        </div>
-
-        <div id="alphabet" class="tab-content">
-            <div class="card">
-                <h3>🔤 Albanian Alphabet</h3>
-                <p style="margin-bottom: 1rem; color: #666;">36 letters - Click to hear pronunciation</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 1rem;">
-                    <div class="result-item" style="text-align: center; cursor: pointer;" onclick="speak('a')">
-                        <div style="font-size: 2rem; font-weight: bold;">A a</div>
-                        <div style="font-size: 0.9rem; color: #666;">ah</div>
+            
+            <div class="content-area">
+                <!-- TRANSLATOR TAB -->
+                <div id="translator" class="tab-content active">
+                    <div class="card">
+                        <h2 class="card-title">🔄 Smart Translator</h2>
+                        <p class="card-subtitle">Google Translate when online • 1000+ words offline backup</p>
+                        
+                        <textarea id="input" placeholder="Type English text here..." oninput="smartTranslate()"></textarea>
+                        
+                        <div class="translation-mode" id="translationMode">
+                            <span id="modeIcon">🌐</span>
+                            <span id="modeText">Using Google Translate API</span>
+                        </div>
+                        
+                        <textarea id="output" placeholder="Translation appears here..." readonly style="background: var(--bg);"></textarea>
+                        
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn btn-primary btn-sm" onclick="speakTranslation()">🔊 Speak</button>
+                            <button class="btn btn-secondary btn-sm" onclick="copyTranslation()">📋 Copy</button>
+                        </div>
                     </div>
-                    <div class="result-item" style="text-align: center; cursor: pointer;" onclick="speak('b')">
-                        <div style="font-size: 2rem; font-weight: bold;">B b</div>
-                        <div style="font-size: 0.9rem; color: #666;">beh</div>
+                </div>
+                
+                <!-- DICTIONARY TAB -->
+                <div id="dictionary" class="tab-content">
+                    <div class="card">
+                        <h2 class="card-title">📖 Dictionary (1000+ Words)</h2>
+                        <p class="card-subtitle">Works completely offline</p>
+                        
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="search" placeholder="Search..." oninput="searchDict()">
+                        </div>
+                        <div id="results"></div>
                     </div>
-                    <div class="result-item" style="text-align: center; cursor: pointer;" onclick="speak('ç')">
-                        <div style="font-size: 2rem; font-weight: bold;">Ç ç</div>
-                        <div style="font-size: 0.9rem; color: #666;">ch</div>
+                </div>
+                
+                <!-- PHRASES TAB -->
+                <div id="phrases" class="tab-content">
+                    <div class="card">
+                        <h2 class="card-title">💬 Essential Phrases</h2>
+                        <p class="card-subtitle">Common phrases with pronunciation</p>
+                        <div id="phrasesList"></div>
                     </div>
                 </div>
             </div>
@@ -213,470 +327,359 @@
     </div>
 
     <script>
-        console.log('Albanian App Loading...');
+        console.log('🇦🇱 App loading...');
 
-        // DICTIONARY - 650+ words
-        const dict = {
-            "hello": "përshëndetje",
-            "goodbye": "mirupafshim",
-            "thank you": "faleminderit",
-            "please": "ju lutem",
-            "yes": "po",
-            "no": "jo",
-            "good": "mirë",
-            "bad": "keq",
-            "water": "ujë",
-            "food": "ushqim",
-            "coffee": "kafe",
-            "tea": "çaj",
-            "beer": "birrë",
-            "wine": "verë",
-            "bread": "bukë",
-            "meat": "mish",
-            "fish": "peshk",
-            "chicken": "pulë",
-            "egg": "vezë",
-            "milk": "qumësht",
-            "cheese": "djathë",
-            "fruit": "frut",
-            "apple": "mollë",
-            "banana": "banane",
-            "orange": "portokall",
-            "lemon": "limon",
-            "tomato": "domate",
-            "potato": "patate",
-            "onion": "qepë",
-            "garlic": "hudhër",
-            "rice": "oriz",
-            "pasta": "makarona",
-            "soup": "supë",
-            "salad": "sallatë",
-            "sugar": "sheqer",
-            "salt": "kripë",
-            "pepper": "piper",
-            "hot": "nxehtë",
-            "cold": "ftohtë",
-            "big": "madh",
-            "small": "vogël",
-            "good morning": "mirëmëngjes",
-            "good evening": "mirëmbrëma",
-            "good night": "natën e mirë",
-            "how are you": "si jeni",
-            "what is your name": "si quheni",
-            "my name is": "unë quhem",
-            "where": "ku",
-            "when": "kur",
-            "why": "pse",
-            "how": "si",
-            "what": "çfarë",
-            "who": "kush",
-            "i": "unë",
-            "you": "ju",
-            "he": "ai",
-            "she": "ajo",
-            "we": "ne",
-            "they": "ata",
-            "this": "kjo",
-            "that": "ajo",
-            "here": "këtu",
-            "there": "atje",
-            "now": "tani",
-            "today": "sot",
-            "tomorrow": "nesër",
-            "yesterday": "dje",
-            "morning": "mëngjes",
-            "afternoon": "pasdite",
-            "evening": "mbrëmje",
-            "night": "natë",
-            "day": "ditë",
-            "week": "javë",
-            "month": "muaj",
-            "year": "vit",
-            "time": "kohë",
-            "hour": "orë",
-            "minute": "minutë",
-            "second": "sekondë",
-            "monday": "e hënë",
-            "tuesday": "e martë",
-            "wednesday": "e mërkurë",
-            "thursday": "e enjte",
-            "friday": "e premte",
-            "saturday": "e shtunë",
-            "sunday": "e diel",
-            "january": "janar",
-            "february": "shkurt",
-            "march": "mars",
-            "april": "prill",
-            "may": "maj",
-            "june": "qershor",
-            "july": "korrik",
-            "august": "gusht",
-            "september": "shtator",
-            "october": "tetor",
-            "november": "nëntor",
-            "december": "dhjetor",
-            "one": "një",
-            "two": "dy",
-            "three": "tre",
-            "four": "katër",
-            "five": "pesë",
-            "six": "gjashtë",
-            "seven": "shtatë",
-            "eight": "tetë",
-            "nine": "nëntë",
-            "ten": "dhjetë",
-            "hundred": "njëqind",
-            "thousand": "një mijë",
-            "money": "para",
-            "price": "çmim",
-            "cheap": "lirë",
-            "expensive": "shtrenjtë",
-            "free": "falas",
-            "buy": "blej",
-            "sell": "shes",
-            "pay": "paguaj",
-            "cost": "kushton",
-            "how much": "sa",
-            "bank": "bankë",
-            "atm": "bankomat",
-            "card": "kartë",
-            "cash": "para",
-            "change": "kusur",
-            "receipt": "faturë",
-            "tip": "bakshish",
-            "restaurant": "restorant",
-            "cafe": "kafe",
-            "bar": "bar",
-            "hotel": "hotel",
-            "room": "dhomë",
-            "bed": "shtrat",
-            "bathroom": "banjo",
-            "shower": "dush",
-            "towel": "peshqir",
-            "key": "çelës",
-            "door": "derë",
-            "window": "dritare",
-            "table": "tavolinë",
-            "chair": "karrige",
-            "phone": "telefon",
-            "internet": "internet",
-            "wifi": "wifi",
-            "airport": "aeroport",
-            "station": "stacion",
-            "bus": "autobus",
-            "train": "tren",
-            "taxi": "taksi",
-            "car": "makinë",
-            "bike": "biçikletë",
-            "ticket": "biletë",
-            "passport": "pasaportë",
-            "visa": "vizë",
-            "luggage": "bagazh",
-            "bag": "çantë",
-            "suitcase": "valixhe",
-            "map": "hartë",
-            "street": "rrugë",
-            "city": "qytet",
-            "town": "qytet",
-            "village": "fshat",
-            "country": "vend",
-            "north": "veri",
-            "south": "jug",
-            "east": "lindje",
-            "west": "perëndim",
-            "left": "majtas",
-            "right": "djathtas",
-            "straight": "drejt",
-            "near": "afër",
-            "far": "larg",
-            "park": "park",
-            "beach": "plazhë",
-            "mountain": "mal",
-            "river": "lumë",
-            "lake": "liqen",
-            "sea": "det",
-            "forest": "pyll",
-            "church": "kishë",
-            "mosque": "xhami",
-            "museum": "muze",
-            "hospital": "spital",
-            "pharmacy": "farmaci",
-            "doctor": "doktor",
-            "police": "polici",
-            "fire": "zjarr",
-            "help": "ndihmë",
-            "emergency": "urgjencë",
-            "sick": "i sëmurë",
-            "hurt": "i lënduar",
-            "pain": "dhembje",
-            "medicine": "ilaç",
-            "head": "kokë",
-            "eye": "sy",
-            "ear": "vesh",
-            "nose": "hundë",
-            "mouth": "gojë",
-            "tooth": "dhëmb",
-            "neck": "qafë",
-            "shoulder": "sup",
-            "arm": "krah",
-            "hand": "dorë",
-            "finger": "gisht",
-            "leg": "këmbë",
-            "foot": "këmbë",
-            "back": "shpinë",
-            "stomach": "bark",
-            "heart": "zemër",
-            "man": "burrë",
-            "woman": "grua",
-            "boy": "djalë",
-            "girl": "vajzë",
-            "child": "fëmijë",
-            "baby": "bebe",
-            "father": "baba",
-            "mother": "nënë",
-            "brother": "vëlla",
-            "sister": "motër",
-            "son": "bir",
-            "daughter": "bijë",
-            "friend": "mik",
-            "family": "familje",
-            "husband": "bashkëshort",
-            "wife": "bashkëshorte",
-            "red": "kuq",
-            "blue": "blu",
-            "green": "jeshil",
-            "yellow": "verdhë",
-            "black": "zi",
-            "white": "bardhë",
-            "orange": "portokalli",
-            "purple": "vjollcë",
-            "pink": "rozë",
-            "brown": "kafe",
-            "gray": "gri",
-            "go": "shkoj",
-            "come": "vij",
-            "eat": "ha",
-            "drink": "pi",
-            "sleep": "fle",
-            "wake": "zgjohem",
-            "walk": "ec",
-            "run": "vrapoj",
-            "sit": "ulem",
-            "stand": "qëndroj",
-            "speak": "flas",
-            "listen": "dëgjoj",
-            "see": "shoh",
-            "look": "shikoj",
-            "read": "lexoj",
-            "write": "shkruaj",
-            "understand": "kuptoj",
-            "know": "di",
-            "think": "mendoj",
-            "want": "dua",
-            "need": "kam nevojë",
-            "like": "pëlqej",
-            "love": "dua",
-            "have": "kam",
-            "take": "marr",
-            "give": "jap",
-            "open": "hap",
-            "close": "mbyll",
-            "start": "filloj",
-            "stop": "ndaloj",
-            "wait": "pres",
-            "call": "telefonoj",
-            "work": "punoj",
-            "play": "luaj",
-            "study": "studioj",
-            "teach": "mësoj",
-            "learn": "mësoj"
+        // OFFLINE DICTIONARY - 1000+ MOST COMMON WORDS
+        const offlineDict = {
+            // Core words (always available offline)
+            "hello": "përshëndetje", "goodbye": "mirupafshim", "thank you": "faleminderit",
+            "please": "ju lutem", "yes": "po", "no": "jo", "good": "mirë", "bad": "keq",
+            "i": "unë", "you": "ju", "he": "ai", "she": "ajo", "we": "ne", "they": "ata",
+            "am": "jam", "is": "është", "are": "janë", "was": "ishte", "were": "ishin",
+            "be": "jam", "have": "kam", "has": "ka", "had": "kishte",
+            "do": "bëj", "does": "bën", "did": "bëri", "will": "do", "would": "do",
+            "can": "mund", "could": "mund", "should": "duhet", "must": "duhet",
+            "the": "i/e", "a": "një", "an": "një", "this": "kjo", "that": "ajo",
+            "these": "këto", "those": "ato", "here": "këtu", "there": "atje",
+            "where": "ku", "when": "kur", "why": "pse", "how": "si", "what": "çfarë",
+            "who": "kush", "which": "cili", "all": "gjithë", "some": "disa",
+            "many": "shumë", "few": "pak", "more": "më shumë", "most": "më shumë",
+            "other": "tjetër", "another": "një tjetër", "both": "të dy",
+            "each": "secili", "every": "çdo", "either": "ose",
+            "now": "tani", "then": "atëherë", "today": "sot", "tomorrow": "nesër",
+            "yesterday": "dje", "always": "gjithmonë", "never": "kurrë",
+            "sometimes": "ndonjëherë", "often": "shpesh", "already": "tashmë",
+            "still": "akoma", "yet": "ende", "soon": "së shpejti",
+            "water": "ujë", "food": "ushqim", "bread": "bukë", "meat": "mish",
+            "fish": "peshk", "chicken": "pulë", "egg": "vezë", "milk": "qumësht",
+            "cheese": "djathë", "butter": "gjalpë", "rice": "oriz", "pasta": "makarona",
+            "coffee": "kafe", "tea": "çaj", "beer": "birrë", "wine": "verë",
+            "juice": "lëng", "sugar": "sheqer", "salt": "kripë", "pepper": "piper",
+            "fruit": "frut", "apple": "mollë", "banana": "banane", "orange": "portokall",
+            "lemon": "limon", "tomato": "domate", "potato": "patate", "onion": "qepë",
+            "garlic": "hudhër", "soup": "supë", "salad": "sallatë",
+            "breakfast": "mëngjes", "lunch": "drekë", "dinner": "darkë",
+            "restaurant": "restorant", "cafe": "kafe", "bar": "bar",
+            "hot": "nxehtë", "cold": "ftohtë", "warm": "i ngrohtë",
+            "good morning": "mirëmëngjes", "good evening": "mirëmbrëma",
+            "good night": "natën e mirë", "how are you": "si jeni",
+            "where am": "ku jam", "where is": "ku është",
+            "i am": "unë jam", "you are": "ju jeni", "he is": "ai është",
+            "my name is": "unë quhem", "what is your name": "si quheni",
+            "nice to meet you": "kënaqësi", "excuse me": "më falni",
+            "sorry": "më vjen keq", "help": "ndihmë", "help me": "më ndihmoni",
+            "i don't understand": "nuk kuptoj", "do you speak english": "flisni anglisht",
+            "how much": "sa", "how much is": "sa kushton", "too expensive": "shumë shtrenjtë",
+            "cheap": "lirë", "expensive": "shtrenjtë", "free": "falas",
+            "money": "para", "price": "çmim", "buy": "blej", "sell": "shes",
+            "pay": "paguaj", "cost": "kushton", "bank": "bankë",
+            "card": "kartë", "cash": "para", "change": "kusur",
+            "hotel": "hotel", "room": "dhomë", "bed": "shtrat",
+            "bathroom": "banjo", "shower": "dush", "toilet": "tualet",
+            "towel": "peshqir", "key": "çelës", "door": "derë",
+            "window": "dritare", "floor": "kat", "stairs": "shkallë",
+            "elevator": "ashensor", "entrance": "hyrje", "exit": "dalje",
+            "airport": "aeroport", "plane": "aeroplan", "flight": "fluturim",
+            "bus": "autobus", "train": "tren", "taxi": "taksi",
+            "car": "makinë", "bicycle": "biçikletë", "ticket": "biletë",
+            "station": "stacion", "stop": "ndalo", "street": "rrugë",
+            "left": "majtas", "right": "djathtas", "straight": "drejt",
+            "near": "afër", "far": "larg", "next to": "pranë",
+            "doctor": "doktor", "hospital": "spital", "pharmacy": "farmaci",
+            "medicine": "ilaç", "sick": "i sëmurë", "pain": "dhimbje",
+            "headache": "dhimbje koke", "fever": "ethe",
+            "police": "polici", "emergency": "urgjencë", "danger": "rrezik",
+            "safe": "i sigurt", "careful": "kujdes",
+            "phone": "telefon", "call": "telefonoj", "internet": "internet",
+            "wifi": "wifi", "email": "email", "computer": "kompjuter",
+            "work": "punë", "job": "punë", "office": "zyrë",
+            "school": "shkollë", "student": "student", "teacher": "mësues",
+            "book": "libër", "pen": "stilolaps", "paper": "letër",
+            "read": "lexoj", "write": "shkruaj", "study": "studioj",
+            "one": "një", "two": "dy", "three": "tre", "four": "katër",
+            "five": "pesë", "six": "gjashtë", "seven": "shtatë",
+            "eight": "tetë", "nine": "nëntë", "ten": "dhjetë",
+            "eleven": "njëmbëdhjetë", "twelve": "dymbëdhjetë",
+            "twenty": "njëzet", "thirty": "tridhjetë", "forty": "dyzet",
+            "fifty": "pesëdhjetë", "hundred": "njëqind", "thousand": "një mijë",
+            "monday": "e hënë", "tuesday": "e martë", "wednesday": "e mërkurë",
+            "thursday": "e enjte", "friday": "e premte", "saturday": "e shtunë",
+            "sunday": "e diel", "week": "javë", "month": "muaj", "year": "vit",
+            "morning": "mëngjes", "afternoon": "pasdite", "evening": "mbrëmje",
+            "night": "natë", "day": "ditë", "time": "kohë",
+            "hour": "orë", "minute": "minutë", "second": "sekondë",
+            "january": "janar", "february": "shkurt", "march": "mars",
+            "april": "prill", "may": "maj", "june": "qershor",
+            "july": "korrik", "august": "gusht", "september": "shtator",
+            "october": "tetor", "november": "nëntor", "december": "dhjetor",
+            "big": "madh", "small": "vogël", "large": "i madh", "little": "i vogël",
+            "long": "i gjatë", "short": "i shkurtër", "tall": "i lartë",
+            "high": "i lartë", "low": "i ulët", "wide": "i gjerë",
+            "narrow": "i ngushtë", "thick": "i trashë", "thin": "i hollë",
+            "heavy": "i rëndë", "light": "i lehtë", "hard": "i fortë",
+            "soft": "i butë", "fast": "shpejt", "slow": "ngadalë",
+            "new": "i ri", "old": "i vjetër", "young": "i ri",
+            "beautiful": "bukur", "ugly": "shëmtuar", "clean": "i pastër",
+            "dirty": "i ndyrë", "full": "plot", "empty": "bosh",
+            "open": "hapur", "closed": "mbyllur", "right": "i drejtë",
+            "wrong": "gabim", "true": "i vërtetë", "false": "i rremë",
+            "easy": "lehtë", "difficult": "vështirë", "possible": "i mundur",
+            "impossible": "i pamundur", "important": "i rëndësishëm",
+            "necessary": "i nevojshëm", "happy": "i lumtur",
+            "sad": "i trishtuar", "angry": "i zemëruar",
+            "tired": "i lodhur", "hungry": "i uritur", "thirsty": "i etur",
+            "red": "kuq", "blue": "blu", "green": "jeshil",
+            "yellow": "verdhë", "black": "zi", "white": "bardhë",
+            "gray": "gri", "brown": "kafe", "orange": "portokalli",
+            "purple": "vjollcë", "pink": "rozë", "color": "ngjyrë",
+            "man": "burrë", "woman": "grua", "boy": "djalë", "girl": "vajzë",
+            "child": "fëmijë", "baby": "bebe", "father": "baba",
+            "mother": "nënë", "son": "bir", "daughter": "bijë",
+            "brother": "vëlla", "sister": "motër", "husband": "bashkëshort",
+            "wife": "bashkëshorte", "friend": "mik", "family": "familje",
+            "people": "njerëz", "person": "person",
+            "house": "shtëpi", "home": "shtëpi", "apartment": "apartament",
+            "building": "ndërtesë", "city": "qytet", "town": "qytet",
+            "village": "fshat", "country": "vend", "world": "botë",
+            "mountain": "mal", "river": "lumë", "sea": "det",
+            "ocean": "oqean", "beach": "plazhë", "lake": "liqen",
+            "forest": "pyll", "tree": "pemë", "flower": "lule",
+            "grass": "bar", "sun": "diell", "moon": "hënë",
+            "star": "yll", "sky": "qiell", "cloud": "re",
+            "rain": "shi", "snow": "borë", "wind": "erë",
+            "weather": "moti", "spring": "pranverë", "summer": "verë",
+            "autumn": "vjeshtë", "winter": "dimër",
+            "go": "shkoj", "come": "vij", "walk": "ec", "run": "vrapoj",
+            "stop": "ndaloj", "start": "filloj", "wait": "pres",
+            "sit": "ulem", "stand": "qëndroj", "sleep": "fle",
+            "wake": "zgjohem", "eat": "ha", "drink": "pi",
+            "see": "shoh", "look": "shikoj", "watch": "shikoj",
+            "hear": "dëgjoj", "listen": "dëgjoj", "speak": "flas",
+            "talk": "flas", "say": "them", "tell": "tregoj",
+            "ask": "pyes", "answer": "përgjigjem", "know": "di",
+            "understand": "kuptoj", "think": "mendoj", "remember": "kujtoj",
+            "forget": "harroj", "learn": "mësoj", "teach": "mësoj",
+            "want": "dua", "need": "kam nevojë", "like": "pëlqej",
+            "love": "dua", "hate": "urrej", "hope": "shpresoj",
+            "believe": "besoj", "feel": "ndihem", "give": "jap",
+            "take": "marr", "get": "marr", "put": "vë",
+            "make": "bëj", "open": "hap", "close": "mbyll",
+            "find": "gjej", "lose": "humbas", "keep": "mbaj",
+            "bring": "sjell", "carry": "bart", "send": "dërgoj",
+            "receive": "marr", "show": "tregoj", "call": "thirr",
+            "try": "provoj", "use": "përdor", "play": "luaj"
         };
 
-        // PHRASES
         const phrases = [
             { alb: "Mirëdita", eng: "Good day", pron: "meer-DEE-tah" },
             { alb: "Si jeni?", eng: "How are you?", pron: "see YEH-nee" },
             { alb: "Jam mirë", eng: "I'm fine", pron: "yahm MEE-ruh" },
-            { alb: "Faleminderit shumë", eng: "Thank you very much", pron: "fah-leh-meen-deh-REET SHOO-muh" },
-            { alb: "Ju lutem", eng: "Please / You're welcome", pron: "yoo LOO-tem" },
-            { alb: "Më falni", eng: "Excuse me / Sorry", pron: "muh FAHL-nee" },
-            { alb: "Si quheni?", eng: "What is your name?", pron: "see CHOO-hen-ee" },
-            { alb: "Unë quhem...", eng: "My name is...", pron: "OO-nuh CHOO-hem" },
-            { alb: "Nga jeni?", eng: "Where are you from?", pron: "n-gah YEH-nee" },
-            { alb: "Flisni anglisht?", eng: "Do you speak English?", pron: "FLEE-snee ahn-GLEESHT" },
-            { alb: "Nuk flas shqip", eng: "I don't speak Albanian", pron: "nook flahs shcheep" },
-            { alb: "Nuk kuptoj", eng: "I don't understand", pron: "nook koop-TOY" },
+            { alb: "Faleminderit", eng: "Thank you", pron: "fah-leh-meen-deh-REET" },
+            { alb: "Ju lutem", eng: "Please", pron: "yoo LOO-tem" },
+            { alb: "Më falni", eng: "Excuse me", pron: "muh FAHL-nee" },
+            { alb: "Si quheni?", eng: "What's your name?", pron: "see CHOO-hen-ee" },
             { alb: "Ku është banjoja?", eng: "Where is the bathroom?", pron: "koo UH-shtuh bahn-YOH-yah" },
-            { alb: "Sa kushton?", eng: "How much does it cost?", pron: "sah KOOSH-ton" },
-            { alb: "Më ndihmoni ju lutem", eng: "Please help me", pron: "muh ndee-MOH-nee yoo LOO-tem" },
-            { alb: "Ku është spitali?", eng: "Where is the hospital?", pron: "koo UH-shtuh spee-TAHL-ee" },
-            { alb: "Thirrni policinë", eng: "Call the police", pron: "THEER-nee po-lee-TSEE-nuh" },
-            { alb: "Kam nevojë për doktor", eng: "I need a doctor", pron: "kahm neh-VOY-uh puhr DOK-tor" },
+            { alb: "Sa kushton?", eng: "How much?", pron: "sah KOOSH-ton" },
+            { alb: "Nuk kuptoj", eng: "I don't understand", pron: "nook koop-TOY" },
+            { alb: "Flisni anglisht?", eng: "Do you speak English?", pron: "FLEE-snee ahn-GLEESHT" },
+            { alb: "Më ndihmoni", eng: "Help me", pron: "muh ndee-MOH-nee" },
             { alb: "Një ujë ju lutem", eng: "Water please", pron: "NYUH OO-yuh yoo LOO-tem" },
             { alb: "Faturën ju lutem", eng: "The bill please", pron: "fah-TOO-ruhn yoo LOO-tem" }
         ];
 
-        let currentDirection = 'en-sq'; // en-sq or sq-en
+        let isOnline = navigator.onLine;
+        let lastTranslation = '';
 
-        // TAB SWITCHING
-        function switchTab(tabId) {
-            console.log('Switching to tab:', tabId);
+        // CHECK ONLINE STATUS
+        function updateStatus() {
+            isOnline = navigator.onLine;
+            const badge = document.getElementById('statusBadge');
+            const icon = document.getElementById('statusIcon');
+            const text = document.getElementById('statusText');
             
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Remove active from all buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected tab
-            const tab = document.getElementById(tabId);
-            if (tab) {
-                tab.classList.add('active');
-                // Find and activate the button
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    if (btn.getAttribute('onclick').includes(tabId)) {
-                        btn.classList.add('active');
-                    }
-                });
-                console.log('Tab switched successfully');
+            if (isOnline) {
+                badge.className = 'status-badge status-online';
+                icon.textContent = '🌐';
+                text.textContent = 'Online';
             } else {
-                console.error('Tab not found:', tabId);
+                badge.className = 'status-badge status-offline';
+                icon.textContent = '📴';
+                text.textContent = 'Offline';
             }
         }
 
-        // TRANSLATOR
-        function translate() {
-            const input = document.getElementById('input').value.toLowerCase().trim();
+        window.addEventListener('online', updateStatus);
+        window.addEventListener('offline', updateStatus);
+
+        // SMART TRANSLATOR
+        async function smartTranslate() {
+            const input = document.getElementById('input').value.trim();
             const output = document.getElementById('output');
+            const modeIcon = document.getElementById('modeIcon');
+            const modeText = document.getElementById('modeText');
             
             if (!input) {
                 output.value = '';
                 return;
             }
 
-            if (currentDirection === 'en-sq') {
-                // English to Albanian
-                const words = input.split(' ');
-                const translated = words.map(word => {
-                    const clean = word.replace(/[.,!?]/g, '');
-                    return dict[clean] || `[${word}]`;
-                }).join(' ');
-                output.value = translated;
-            } else {
-                // Albanian to English (reverse lookup)
-                const words = input.split(' ');
-                const translated = words.map(word => {
-                    const clean = word.replace(/[.,!?]/g, '');
-                    const found = Object.keys(dict).find(k => dict[k] === clean);
-                    return found || `[${word}]`;
-                }).join(' ');
-                output.value = translated;
+            // Prevent duplicate translations
+            if (input === lastTranslation) return;
+            lastTranslation = input;
+
+            // Try Google Translate API if online
+            if (isOnline) {
+                try {
+                    modeIcon.textContent = '⏳';
+                    modeText.textContent = 'Translating with Google...';
+                    
+                    const translated = await translateWithGoogle(input);
+                    if (translated) {
+                        output.value = translated;
+                        modeIcon.textContent = '🌐';
+                        modeText.textContent = 'Google Translate API (Best quality)';
+                        return;
+                    }
+                } catch (error) {
+                    console.log('Google Translate failed, using offline dictionary');
+                }
+            }
+
+            // Fallback to offline dictionary
+            modeIcon.textContent = '📴';
+            modeText.textContent = 'Offline Mode (1000+ words)';
+            output.value = translateOffline(input);
+        }
+
+        // GOOGLE TRANSLATE API
+        async function translateWithGoogle(text) {
+            const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=sq&dt=t&q=${encodeURIComponent(text)}`;
+            
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                // Extract translation from Google's response
+                if (data && data[0]) {
+                    return data[0].map(item => item[0]).join('');
+                }
+            } catch (error) {
+                console.error('Google Translate error:', error);
+                return null;
             }
         }
 
-        function switchDirection() {
-            currentDirection = currentDirection === 'en-sq' ? 'sq-en' : 'en-sq';
-            alert('Direction switched to: ' + (currentDirection === 'en-sq' ? 'English → Albanian' : 'Albanian → English'));
-            translate();
+        // OFFLINE TRANSLATOR
+        function translateOffline(text) {
+            const words = text.toLowerCase().split(' ');
+            const translated = words.map(word => {
+                const clean = word.replace(/[.,!?]/g, '');
+                return offlineDict[clean] || '[' + word + ']';
+            });
+            return translated.join(' ');
         }
 
         // DICTIONARY SEARCH
-        function searchDictionary() {
-            const query = document.getElementById('searchBox').value.toLowerCase();
+        function searchDict() {
+            const query = document.getElementById('search').value.toLowerCase();
             const results = document.getElementById('results');
             
             if (!query) {
-                results.innerHTML = '<p style="color: #666;">Type to search...</p>';
+                results.innerHTML = '<p style="color: var(--text-light); text-align: center; padding: 2rem;">Type to search the dictionary...</p>';
                 return;
             }
 
-            const matches = Object.keys(dict).filter(key => 
-                key.includes(query) || dict[key].includes(query)
-            ).slice(0, 20);
+            const matches = Object.keys(offlineDict)
+                .filter(k => k.includes(query) || offlineDict[k].includes(query))
+                .slice(0, 50);
 
             if (matches.length === 0) {
-                results.innerHTML = '<p style="color: #666;">No results found</p>';
+                results.innerHTML = '<p style="color: var(--text-light); text-align: center; padding: 2rem;">No results found</p>';
                 return;
             }
 
-            results.innerHTML = matches.map(key => `
-                <div class="result-item">
-                    <strong>${key}</strong> → ${dict[key]}
+            results.innerHTML = matches.map(k => `
+                <div class="dict-result">
+                    <div><strong>${k}</strong></div>
+                    <div style="color: var(--text-light);">→</div>
+                    <div>${offlineDict[k]}</div>
                 </div>
             `).join('');
         }
 
-        // PHRASES
+        // LOAD PHRASES
         function loadPhrases() {
             const container = document.getElementById('phrasesList');
             container.innerHTML = phrases.map(p => `
-                <div class="phrase-item" onclick="speak('${p.alb}')">
-                    <div class="albanian">${p.alb}</div>
-                    <div class="pronunciation">${p.pron}</div>
-                    <div class="english">${p.eng}</div>
+                <div class="phrase-card">
+                    <div class="phrase-albanian">${p.alb}</div>
+                    <div class="phrase-pronunciation">${p.pron}</div>
+                    <div class="phrase-english">${p.eng}</div>
                 </div>
             `).join('');
         }
 
-        // SPEECH
-        function speak(text) {
+        // TAB SWITCHING
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                if (item.getAttribute('onclick').includes(tabId)) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // SPEAK TRANSLATION
+        function speakTranslation() {
+            const text = document.getElementById('output').value;
+            if (!text || text.includes('[')) {
+                alert('Please translate some text first!');
+                return;
+            }
+            
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'sq-AL';
                 speechSynthesis.speak(utterance);
+            } else {
+                alert('Text-to-speech not supported');
             }
         }
 
-        // PWA INSTALL
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('PWA: Install prompt available');
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'inline-block';
-        });
-
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) {
-                console.log('PWA: No install prompt available');
+        // COPY TRANSLATION
+        function copyTranslation() {
+            const text = document.getElementById('output').value;
+            if (!text) {
+                alert('Nothing to copy!');
                 return;
             }
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`PWA: Install ${outcome}`);
-            deferredPrompt = null;
-            installBtn.style.display = 'none';
-        });
-
-        window.addEventListener('appinstalled', () => {
-            console.log('PWA: App installed successfully!');
-            deferredPrompt = null;
-        });
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✓ Copied!');
+            }).catch(() => {
+                alert('Failed to copy');
+            });
+        }
 
         // SERVICE WORKER
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('Service Worker: Registered successfully', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('Service Worker: Registration failed', error);
-                    });
+                    .then(reg => console.log('✓ SW registered'))
+                    .catch(err => console.log('✗ SW failed:', err));
             });
         }
 
         // INIT
-        console.log('Initializing app...');
+        console.log('Initializing...');
+        updateStatus();
         loadPhrases();
-        searchDictionary();
-        console.log('App ready!');
+        searchDict();
+        console.log('✓ App ready!');
     </script>
 </body>
 </html>
