@@ -1,0 +1,21 @@
+{
+  "name": "Mëso Shqip - Albanian Language Learning",
+  "short_name": "Mëso Shqip",
+  "description": "Learn Albanian offline with 650+ words, phrases, and cultural tips",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#dc2626",
+  "theme_color": "#dc2626",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23dc2626'/><text x='50' y='70' text-anchor='middle' font-size='60'>🇦🇱</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "language", "travel"],
+  "lang": "en-US",
+  "dir": "ltr"
+}

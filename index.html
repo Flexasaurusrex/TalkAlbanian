@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn Albanian offline - comprehensive dictionary, phrases, and translator">
+    <title>🇦🇱 Mëso Shqip - Albanian Language Learning App</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>🇦🇱 Mëso Shqip</h1>
+        <p>Your Albanian language companion</p>
+        <div class="badge">✓ Works Offline</div>
+        <button id="installBtn" style="display: none;" class="btn">📱 Install App</button>
+    </div>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('daily')">📅 Daily</div>
+            <div class="nav-tab" onclick="switchTab('quickstart')">⚡ Quick</div>
+            <div class="nav-tab" onclick="switchTab('voice')">🎤 Voice</div>
+            <div class="nav-tab" onclick="switchTab('translator')">🔄 Translator</div>
+            <div class="nav-tab" onclick="switchTab('dictionary')">📖 Dictionary</div>
+            <div class="nav-tab" onclick="switchTab('phrases')">💬 Phrases</div>
+            <div class="nav-tab" onclick="switchTab('builder')">🏗️ Builder</div>
+            <div class="nav-tab" onclick="switchTab('alphabet')">🔤 Alphabet</div>
+            <div class="nav-tab" onclick="switchTab('quiz')">🎯 Quiz</div>
+            <div class="nav-tab" onclick="switchTab('culture')">🇦🇱 Culture</div>
+            <div class="nav-tab" onclick="switchTab('flashcards')">🎴 Cards</div>
+            <div class="nav-tab" onclick="switchTab('progress')">📊 Progress</div>
+        </div>
+
+        <div id="daily" class="tab-content active">
+            <div class="daily-challenge">
+                <h3>Today's Challenge</h3>
+                <p id="dailyGoal">Learn 5 new phrases and practice for 15 minutes!</p>
+                <div class="progress-bar" style="background: rgba(255,255,255,0.3); margin-top: 1rem;">
+                    <div class="progress-fill" id="dailyProgress" style="width: 0%; background: white;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="emoji">🌟</span> Phrase of the Day</h3>
+                <div class="phrase-item" style="border: 2px solid var(--primary);">
+                    <div class="albanian" id="dailyPhraseAlb">Mirëdita! Si jeni?</div>
+                    <div class="pronunciation" id="dailyPhrasePron">meer-DEE-tah! see YEH-nee?</div>
+                    <div class="english" id="dailyPhraseEng">Good day! How are you?</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="emoji">⭐</span> Your Favorites</h3>
+                <div id="favoritesList">
+                    <p style="text-align: center; color: var(--text-light); padding: 1rem;">No favorites yet. Click the ⭐ on phrases to save them here!</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="emoji">🕐</span> Recently Used</h3>
+                <div id="historyList">
+                    <p style="text-align: center; color: var(--text-light); padding: 1rem;">Your recent translations will appear here.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="emoji">🎯</span> Quick Start Guide</h3>
+                <ul class="tips-list">
+                    <li>Albanian uses 36 letters - similar to English but with some extras</li>
+                    <li>Pronunciation is mostly phonetic - read as written!</li>
+                    <li>Start with greetings and basic courtesy phrases</li>
+                    <li>This app works 100% offline - perfect for travel!</li>
+                    <li>Dictionary has 650+ common words built-in</li>
+                    <li>Click ⭐ to save your favorite phrases for quick access!</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="quickstart" class="tab-content">
+            <div class="card" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white;">
+                <h3 style="color: white;"><span class="emoji">🚨</span> Emergency Phrases</h3>
+                <div class="phrase-item" style="background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5);" onclick="copyToClipboard('Më ndihmoni ju lutem')">
+                    <div class="albanian" style="color: white;">Më ndihmoni ju lutem</div>
+                    <div class="pronunciation" style="color: rgba(255,255,255,0.9);">muh ndee-MOH-nee yoo LOO-tem</div>
+                    <div class="english" style="color: rgba(255,255,255,0.8);">Please help me 📋</div>
+                </div>
+                <div class="phrase-item" style="background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5);" onclick="copyToClipboard('Thirrni policinë')">
+                    <div class="albanian" style="color: white;">Thirrni policinë</div>
+                    <div class="pronunciation" style="color: rgba(255,255,255,0.9);">THEER-nee po-lee-TSEE-nuh</div>
+                    <div class="english" style="color: rgba(255,255,255,0.8);">Call the police 📋</div>
+                </div>
+                <div class="phrase-item" style="background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5);" onclick="copyToClipboard('Kam nevojë për doktor')">
+                    <div class="albanian" style="color: white;">Kam nevojë për doktor</div>
+                    <div class="pronunciation" style="color: rgba(255,255,255,0.9);">kahm neh-VOY-uh puhr DOK-tor</div>
+                    <div class="english" style="color: rgba(255,255,255,0.8);">I need a doctor 📋</div>
+                </div>
+                <div class="phrase-item" style="background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5);" onclick="copyToClipboard('Ku është spitali?')">
+                    <div class="albanian" style="color: white;">Ku është spitali?</div>
+                    <div class="pronunciation" style="color: rgba(255,255,255,0.9);">koo UH-shtuh spee-TAHL</div>
+                    <div class="english" style="color: rgba(255,255,255,0.8);">Where is the hospital? 📋</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="emoji">🍽️</span> Restaurant Essentials</h3>
+                <button class="btn" onclick="speakPhrase('Menunë ju lutem')" style="margin-bottom: 0.5rem;">🔊 Menunë ju lutem <small>(Menu please)</small></button>
+                <button class="btn" onclick="speakPhrase('Faturën ju lutem')" style="margin-bottom: 0.5rem;">🔊 Faturën ju lutem <small>(Bill please)</small></button>
+                <button class="btn" onclick="speakPhrase('Një ujë ju lutem')" style="margin-bottom: 0.5rem;">🔊 Një ujë ju lutem <small>(Water please)</small></button>
+                <button class="btn" onclick="speakPhrase('Ishte shumë e mirë')" style="margin-bottom: 0.5rem;">🔊 Ishte shumë e mirë <small>(It was very good)</small></button>
+            </div>
+
+            <div class="card">
+                <h3><span class="emoji">🚕</span> Taxi & Transport</h3>
+                <button class="btn btn-secondary" onclick="speakPhrase('Sa kushton?')" style="margin-bottom: 0.5rem;">🔊 Sa kushton? <small>(How much?)</small></button>
+                <button class="btn btn-secondary" onclick="speakPhrase('Ndaloni këtu ju lutem')" style="margin-bottom: 0.5rem;">🔊 Ndaloni këtu ju lutem <small>(Stop here please)</small></button>
+                <button class="btn btn-secondary" onclick="speakPhrase('Më çoni këtu')" style="margin-bottom: 0.5rem;">🔊 Më çoni këtu <small>(Take me here)</small></button>
+            </div>
+
+            <div class="card">
+                <h3><span class="emoji">🛍️</span> Shopping Quick Phrases</h3>
+                <button class="btn" onclick="speakPhrase('Sa është?')" style="margin-bottom: 0.5rem; background: var(--success);">🔊 Sa është? <small>(How much is it?)</small></button>
+                <button class="btn" onclick="speakPhrase('Shumë shtrenjtë')" style="margin-bottom: 0.5rem; background: var(--success);">🔊 Shumë shtrenjtë <small>(Too expensive)</small></button>
+                <button class="btn" onclick="speakPhrase('Do ta blej')" style="margin-bottom: 0.5rem; background: var(--success);">🔊 Do ta blej <small>(I'll take it)</small></button>
+            </div>
+        </div>
+
+        <div id="voice" class="tab-content">
+            <div class="card">
+                <h3><span class="emoji">🎤</span> Voice Translator</h3>
+                <p style="margin-bottom: 1rem; color: var(--text-light);">Speak English and get instant Albanian translation!</p>
+                
+                <div style="text-align: center; margin: 2rem 0;">
+                    <button id="voiceBtn" onclick="startVoiceRecognition()" class="btn" style="font-size: 1.2rem; padding: 1.5rem 2rem; background: var(--primary);">
+                        🎤 Tap to Speak
+                    </button>
+                    <p id="voiceStatus" style="margin-top: 1rem; color: var(--text-light); font-style: italic;">Ready to listen...</p>
+                </div>
+
+                <div id="voiceResult" style="display: none; padding: 1.5rem; background: var(--success); color: white; border-radius: 12px; margin-top: 1rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <strong>You said:</strong>
+                        <div id="voiceInput" style="font-size: 1.1rem; margin-top: 0.5rem;"></div>
+                    </div>
+                    <div>
+                        <strong>Albanian:</strong>
+                        <div id="voiceOutput" style="font-size: 1.5rem; font-weight: 600; margin-top: 0.5rem;"></div>
+                    </div>
+                    <button onclick="speakVoiceResult()" class="btn" style="background: white; color: var(--success); margin-top: 1rem;">🔊 Speak It</button>
+                </div>
+
+                <div class="card" style="background: var(--bg-light); margin-top: 1rem;">
+                    <p style="font-size: 0.9rem; color: var(--text-light);">
+                        💡 <strong>Tips:</strong><br>
+                        • Speak clearly in English<br>
+                        • Works best with simple phrases<br>
+                        • Requires internet for speech recognition<br>
+                        • Translation happens offline using the dictionary
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional tabs would go here - I'll include a placeholder structure -->
+        <div id="alphabet" class="tab-content">
+            <div class="card">
+                <h3><span class="emoji">🔤</span> Albanian Alphabet</h3>
+                <p>Alphabet content loaded via JavaScript...</p>
+            </div>
+        </div>
+
+        <div id="quiz" class="tab-content">
+            <div class="card">
+                <h3><span class="emoji">🎯</span> Quiz Mode</h3>
+                <div id="quizStart">
+                    <p>Quiz content loaded via JavaScript...</p>
+                </div>
+                <div id="quizContainer" style="display: none;"></div>
+                <div id="quizResults" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div id="culture" class="tab-content">
+            <div class="card">
+                <h3><span class="emoji">🇦🇱</span> Cultural Tips</h3>
+                <p>Culture content loaded via JavaScript...</p>
+            </div>
+        </div>
+
+        <div id="builder" class="tab-content">
+            <div class="card">
+                <h3><span class="emoji">🏗️</span> Sentence Builder</h3>
+                <p>Builder content loaded via JavaScript...</p>
+            </div>
+        </div>
+
+        <div id="translator" class="tab-content">
+            <div class="card">
+                <h3><span class="emoji">🔄</span> Offline Translator</h3>
+                <p style="margin-bottom: 1rem; color: var(--text-light); font-size: 0.9rem;">
+                    💡 <strong>Note:</strong> This translator works best for individual words. Albanian grammar is different from English, so word-by-word translation won't give perfect sentences. Words in [brackets] aren't in the dictionary yet. For complete phrases, check the <strong>Phrases</strong> tab or <strong>Builder</strong> tab!
+                </p>
+                <div class="switch-lang">
+                    <button onclick="toggleTranslationDirection()" id="langSwitch">🔄 Switch to Albanian → English</button>
+                </div>
+                <div class="translator">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;" id="inputLabel">English to Albanian</label>
+                        <textarea id="inputText" placeholder="Type here..." oninput="translateOffline()"></textarea>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;" id="outputLabel">Albanian Translation</label>
+                        <textarea id="outputText" placeholder="Translation appears automatically..." readonly></textarea>
+                        <div class="word-count" id="wordCount"></div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-secondary" onclick="speakText()" style="flex: 1;">🔊 Pronounce</button>
+                        <button class="btn" onclick="copyTranslation()" style="flex: 1; background: var(--success);">📋 Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dictionary" class="tab-content">
+            <div class="card">
+                <h3><span class="emoji">📖</span> Albanian Dictionary</h3>
+                <p style="margin-bottom: 1rem; color: var(--text-light);">Search 650+ common words - works offline!</p>
+                <div class="search-box">
+                    <input type="text" id="dictSearch" placeholder="Search English or Albanian..." onkeyup="window.searchDictionary()">
+                </div>
+                <button onclick="window.searchDictionary()" style="padding: 0.5rem 1rem; margin-bottom: 1rem; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer;">Search</button>
+                <div class="search-results" id="dictResults">
+                    <p style="text-align: center; color: var(--text-light); padding: 2rem;">Type to search the dictionary...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="phrases" class="tab-content">
+            <div class="card">
+                <h3><span class="emoji">💬</span> Essential Phrases</h3>
+                <div id="phrasesContainer"></div>
+            </div>
+        </div>
+
+        <div id="flashcards" class="tab-content">
+            <div class="card">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="flashcard-text" id="cardText">Click to start!</div>
+                    <div class="flashcard-hint" id="cardHint">Tap to flip</div>
+                </div>
+                <div class="flashcard-controls">
+                    <button class="btn" onclick="nextCard()" style="background: var(--success);">✓ Know It</button>
+                    <button class="btn" onclick="nextCard()" style="background: var(--warning);">Study More</button>
+                </div>
+                <p style="text-align: center; color: var(--text-light); margin-top: 1rem;">
+                    Card <span id="cardNumber">0</span> of <span id="totalCards">0</span>
+                </p>
+            </div>
+        </div>
+
+        <div id="progress" class="tab-content">
+            <div class="card">
+                <h3><span class="emoji">📊</span> Your Progress</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="daysStreak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="phrasesLearned">0</div>
+                        <div class="stat-label">Phrases Learned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="minutesStudied">0</div>
+                        <div class="stat-label">Minutes Studied</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="wordsLearned">0</div>
+                        <div class="stat-label">Words Learned</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="emoji">🎯</span> Weekly Goal</h3>
+                <p style="margin-bottom: 0.5rem;">Study 150 minutes this week</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="weeklyProgress" style="width: 0%;"></div>
+                </div>
+                <p style="text-align: right; color: var(--text-light); margin-top: 0.5rem;">
+                    <span id="weeklyMinutes">0</span> / 150 minutes
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
