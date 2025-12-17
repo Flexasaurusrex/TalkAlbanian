@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🇦🇱 Mëso Shqip - Albanian Learning</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Learn Albanian offline - dictionary, phrases, and translator">
+    <meta name="theme-color" content="#dc2626">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mëso Shqip">
+    <link rel="manifest" href="/manifest.json">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -137,6 +146,7 @@
         <div class="header">
             <h1>🇦🇱 Mëso Shqip</h1>
             <p>Your Albanian Language Companion</p>
+            <button id="installBtn" class="btn" style="display: none; margin-top: 1rem;">📱 Install App</button>
         </div>
 
         <div class="tabs">
@@ -613,6 +623,47 @@
                 utterance.lang = 'sq-AL';
                 speechSynthesis.speak(utterance);
             }
+        }
+
+        // PWA INSTALL
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('PWA: Install prompt available');
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'inline-block';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                console.log('PWA: No install prompt available');
+                return;
+            }
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`PWA: Install ${outcome}`);
+            deferredPrompt = null;
+            installBtn.style.display = 'none';
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA: App installed successfully!');
+            deferredPrompt = null;
+        });
+
+        // SERVICE WORKER
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Service Worker: Registered successfully', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker: Registration failed', error);
+                    });
+            });
         }
 
         // INIT
