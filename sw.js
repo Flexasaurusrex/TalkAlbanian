@@ -1,53 +1,58 @@
-// Service Worker for Albanian Learning App
-const CACHE_NAME = 'albanian-app-v1';
+const CACHE_NAME = 'albanian-app-v2';
 const urlsToCache = [
   '/',
-  '/index.html',
-  '/manifest.json'
+  '/index.html'
 ];
 
-// Install event - cache files
+// Listen for SKIP_WAITING message
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// Install - cache files
 self.addEventListener('install', event => {
-  console.log('Service Worker: Installing...');
+  console.log('SW: Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Service Worker: Caching files');
-        return cache.addAll(urlsToCache);
-      })
-      .then(() => self.skipWaiting())
+      .then(cache => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting()) // Activate immediately
   );
 });
 
-// Activate event - clean up old caches
+// Activate - clean old caches
 self.addEventListener('activate', event => {
-  console.log('Service Worker: Activating...');
+  console.log('SW: Activating...');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(cache => {
-          if (cache !== CACHE_NAME) {
-            console.log('Service Worker: Clearing old cache');
-            return caches.delete(cache);
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('SW: Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
           }
         })
       );
-    })
+    }).then(() => self.clients.claim()) // Take control immediately
   );
-  return self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch - network first, fallback to cache
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
+        // Clone response to cache
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, responseToCache);
+        });
+        return response;
       })
       .catch(() => {
-        // If both fail, return the cached index page
-        return caches.match('/index.html');
+        // Fallback to cache if network fails
+        return caches.match(event.request);
       })
   );
 });
