@@ -260,6 +260,38 @@
             box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
         
+        /* UPDATE NOTIFICATION */
+        .update-banner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--success);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: slideDown 0.3s;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        
+        .update-banner button {
+            margin-left: 1rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            color: var(--success);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
         .mobile-nav-item {
             flex: 1;
             padding: 0.75rem 0.5rem;
@@ -291,6 +323,12 @@
     </style>
 </head>
 <body>
+    <!-- UPDATE NOTIFICATION -->
+    <div class="update-banner" id="updateBanner">
+        🎉 New version available! 
+        <button onclick="updateApp()">Update Now</button>
+    </div>
+    
     <div class="app-container">
         <div class="header">
             <div>
@@ -720,13 +758,48 @@
             });
         }
 
-        // SERVICE WORKER
+        // SERVICE WORKER WITH AUTO-UPDATE
+        let newWorker;
+        
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('✓ SW registered'))
+                    .then(reg => {
+                        console.log('✓ SW registered');
+                        
+                        // Check for updates every 60 seconds
+                        setInterval(() => {
+                            reg.update();
+                        }, 60000);
+                        
+                        // Detect when new service worker is waiting
+                        reg.addEventListener('updatefound', () => {
+                            newWorker = reg.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New version available!
+                                    showUpdateBanner();
+                                }
+                            });
+                        });
+                    })
                     .catch(err => console.log('✗ SW failed:', err));
+                
+                // Listen for controller change (update activated)
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    window.location.reload();
+                });
             });
+        }
+        
+        function showUpdateBanner() {
+            document.getElementById('updateBanner').style.display = 'block';
+        }
+        
+        function updateApp() {
+            if (newWorker) {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+            }
         }
 
         // INIT
